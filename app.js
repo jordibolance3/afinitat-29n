@@ -212,16 +212,23 @@ function partyResult(p, result) {
     ${p.details.length ? `<details><summary>Per què aquest resultat? · ${p.details.length} ${p.details.length === 1 ? 'comparació' : 'comparacions'}</summary>${p.details.map(detail=>`<div class="match-detail"><h4>${h(detail.questionTitle)}</h4>${matchBadge(detail.similarity, result.scaleVersion)}${detail.weight === 2 ? ' · doble pes' : ''}</span><p><strong>Has prioritzat:</strong> ${h(detail.selectedText)}</p><p>${h(detail.rationale)}</p>${sourceLinks(detail.sourceRefs,result.documents || state.content.documents)}</div>`).join('')}</details>` : ''}
   </article>`;
 }
+// Exportar el resultat: resum de text per compartir i versió per imprimir o desar en PDF.
+const PUBLIC_URL = 'https://jordibolance3.github.io/afinitat-29n/';
+const rankParties = r => [...r.parties].sort((a,b)=>rankKey(b)-rankKey(a) || partyName(a).localeCompare(partyName(b),'ca'));
+function resultSummary(r) {
+  const parties = rankParties(r).filter(p => Number.isFinite(p.score)).map(p => `${partyName(p)} ${pct(p.score)}%`).join(' · ');
+  return `Afinitat 29N · ${r.quizName ?? 'Test curt'} (${r.answeredCount}/${r.totalQuestions ?? 15} respostes): ${parties || 'sense comparacions documentades'}. Fes el test: ${PUBLIC_URL}`;
+}
 function results() {
   if (!state.result) return `<div class="container"><div class="page-head"><h1>El teu resultat comença amb les teves idees.</h1><p>Completa el test per explorar les coincidències.</p></div>${button('start','Comença el test →')}</div>`;
   const r = state.result;
-  const ranked = [...r.parties].sort((a,b)=>rankKey(b)-rankKey(a) || partyName(a).localeCompare(partyName(b),'ca'));
+  const ranked = rankParties(r);
   const leaders = ranked.filter(p=>Number.isFinite(p.score) && rankKey(p) === rankKey(ranked[0]));
-  return `<div class="container"><div class="page-head"><div class="eyebrow"><span class="dot"></span> El teu mapa de coincidències</div><h1>Les respostes, amb perspectiva.</h1><p>${state.resultId ? `Resultat desat${state.resultDate ? ` · ${h(date(state.resultDate))}` : ''}` : 'Resultat de la sessió · encara no desat'} · ${h(r.quizName ?? 'Test curt')} · Versió ${h(r.version)}</p></div>
+  return `<div class="container"><div class="print-only print-header"><strong>Afinitat 29N</strong> · ${h(r.quizName ?? 'Test curt')} · ${r.answeredCount}/${r.totalQuestions ?? 15} respostes · ${h(date(state.resultDate ?? Date.now()))} · Versió ${h(r.version)}<br>${h(PUBLIC_URL)}</div><div class="page-head"><div class="eyebrow"><span class="dot"></span> El teu mapa de coincidències</div><h1>Les respostes, amb perspectiva.</h1><p>${state.resultId ? `Resultat desat${state.resultDate ? ` · ${h(date(state.resultDate))}` : ''}` : 'Resultat de la sessió · encara no desat'} · ${h(r.quizName ?? 'Test curt')} · Versió ${h(r.version)}</p></div>
     ${r.version !== state.content.version ? `<div class="notice info">Aquest resultat es va calcular amb una versió anterior. Pots aplicar les fonts i els criteris actuals a les mateixes respostes. ${button('recalculate','Actualitza el resultat','light small')}</div>` : ''}
     <section class="result-hero"><div><div class="eyebrow">${leaders.length > 1 ? 'Índex d’afinitat més alt, compartit' : 'Índex d’afinitat més alt'}</div><h2>${leaders.length ? h(leaders.map(p=>partyName(p)).join(' · ')) : 'Encara no hi ha respostes comparables.'}</h2><p>${leaders.length ? `Amb les respostes comparables, ${leaders.length > 1 ? 'aquestes candidatures comparteixen' : 'aquesta candidatura té'} la puntuació més alta. Mira la cobertura i les explicacions abans de treure conclusions.` : 'Encara no hi ha coincidències documentades amb les respostes triades. Pots consultar la informació i les fonts de cada candidatura a continuació.'}</p></div><div class="result-numbers"><div><strong>${leaders.length ? pct(leaders[0].score) + '%' : '—'}</strong><span>índex d’afinitat més alt</span></div><div><strong>${r.answeredCount}<small>/${r.totalQuestions ?? 15}</small></strong><span>preguntes respostes</span></div></div></section>
     <div class="results-layout"><div><div class="section-heading"><div><h2>Afinitat amb els partits</h2><p>Tots els partits, ordenats per índex d’afinitat: les coincidències sumen, les mesures compatibles no compten i les oposades resten. Mira la cobertura de cada fitxa: indica amb quantes de les teves respostes s’ha pogut comparar. Els partits sense dades comparables apareixen al final.</p></div></div><div class="ranking">${ranked.map(p=>partyResult(p,r)).join('')}</div></div>
-    <aside class="result-aside"><div class="aside-card"><h3>L’índex té context.</h3><ol><li>Va de 0% a 100% (coincidència en totes les teves respostes que compten). Si les oposicions pesen tant o més que les coincidències, l’índex és 0%. No mesura tot el programa.</li><li>La cobertura indica quina part de les teves respostes s’ha pogut contrastar.</li><li>La puntuació és una interpretació editorial. Cada font es pot consultar.</li></ol><a class="text-button" href="#metode">Llegeix la metodologia ↗</a></div><div class="aside-card"><h3>Continua explorant.</h3><p>Pots tornar al test i canviar prioritats, o llegir els programes pel teu compte.</p>${button('resume-result', r.answeredCount < (r.totalQuestions ?? 15) ? 'Continua aquest test →' : 'Edita les respostes →', 'small')}${button('restart','Torna a fer el test des de zero','light small')}${STATIC ? '' : !state.resultId ? button(state.user ? 'save-last' : 'auth', state.user ? 'Guarda el resultat' : 'Inicia sessió per guardar-lo', 'light small') : '<a class="button light small" href="#compte">Consulta l’historial</a>'}<a href="#programes" class="text-button">Consulta els programes</a></div></aside></div>
+    <aside class="result-aside"><div class="aside-card"><h3>L’índex té context.</h3><ol><li>Va de 0% a 100% (coincidència en totes les teves respostes que compten). Si les oposicions pesen tant o més que les coincidències, l’índex és 0%. No mesura tot el programa.</li><li>La cobertura indica quina part de les teves respostes s’ha pogut contrastar.</li><li>La puntuació és una interpretació editorial. Cada font es pot consultar.</li></ol><a class="text-button" href="#metode">Llegeix la metodologia ↗</a></div><div class="aside-card no-print"><h3>Guarda o comparteix.</h3><p>Desa el resultat en PDF (amb les explicacions desplegades) o copia un resum per enviar-lo.</p>${button('print-result','Desa en PDF o imprimeix','small')}${button('copy-summary','Copia el resum','light small')}</div><div class="aside-card no-print"><h3>Continua explorant.</h3><p>Pots tornar al test i canviar prioritats, o llegir els programes pel teu compte.</p>${button('resume-result', r.answeredCount < (r.totalQuestions ?? 15) ? 'Continua aquest test →' : 'Edita les respostes →', 'small')}${button('restart','Torna a fer el test des de zero','light small')}${STATIC ? '' : !state.resultId ? button(state.user ? 'save-last' : 'auth', state.user ? 'Guarda el resultat' : 'Inicia sessió per guardar-lo', 'light small') : '<a class="button light small" href="#compte">Consulta l’historial</a>'}<a href="#programes" class="text-button">Consulta els programes</a></div></aside></div>
   </div>`;
 }
 const ofName = name => /^[aeiouàèéíïòóúüh]/i.test(name) ? `d’${name}` : `de ${name}`;
@@ -298,6 +305,24 @@ document.addEventListener('click',async event=>{
   if(action==='close-auth'){state.pendingDraftSave=false;return dialog.close();}
   if(action==='show-login')return authForm('login');
   if(action==='show-register')return authForm('register');
+  if(action==='print-result'){
+    // S'obren totes les explicacions perquè surtin al PDF; després de imprimir es tornen a plegar.
+    const closed=[...document.querySelectorAll('#main details:not([open])')];closed.forEach(d=>{d.open=true;});
+    window.addEventListener('afterprint',()=>closed.forEach(d=>{d.open=false;}),{once:true});
+    return window.print();
+  }
+  if(action==='copy-summary'){
+    if(!state.result)return;
+    const text=resultSummary(state.result);
+    let ok=false;
+    try{await navigator.clipboard.writeText(text);ok=true;}
+    catch{
+      // Alternativa per a navegadors que no deixen fer servir l'API del porta-retalls.
+      try{const area=document.createElement('textarea');area.value=text;area.setAttribute('readonly','');area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();ok=document.execCommand('copy');area.remove();}catch{ok=false;}
+    }
+    toast(ok?'Resum copiat. Ja el pots enganxar on vulguis.':`No s’ha pogut copiar automàticament. Resum: ${text}`);
+    return;
+  }
   if(action==='choose-tests'){document.querySelector('#tests')?.scrollIntoView({behavior:'smooth'});document.querySelector('#tests')?.focus({preventScroll:true});return;}
   if(action==='start'){const id=el.dataset.quiz ?? state.quizId;if(!quizzes().some(q=>q.id===id))return;if(id===state.quizId&&Object.keys(state.answers).length){state.pendingReuse=null;if(state.step>=questions().length)state.step=0;return go('test');}return startWithReuse(id);}
   if(action==='reuse-yes'){const r=state.pendingReuse;if(!r)return;const answers={},weights={};for(const [id,f] of Object.entries(r.found)){answers[id]=f.option;if(f.weight===2)weights[id]=2;}loadSelection(r.quizId,answers,weights);state.dirty=Object.values(r.found).some(f=>f.source==='tab');go('test');return toast(`S’han recuperat ${Object.keys(answers).length} respostes. Pots revisar-les i canviar-les quan vulguis.`);}

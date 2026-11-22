@@ -24,3 +24,20 @@ main:focus{outline:none}.spaced{margin-top:25px}
 .coverage-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:#e9eee4;color:#46634b;white-space:nowrap}
 .coverage-pill.low{background:#f8eccd;color:#7a5a12}
 .coverage-warning{font-size:11px;color:#7a5a12;background:#fbf4e1;border-radius:6px;padding:6px 9px;margin:8px 0 0}
+/* Exportar: capcalera nomes en paper i impressio neta del resultat */
+.print-only{display:none}
+@media print{
+  @page{margin:14mm}
+  body{background:#fff !important;color:#000}
+  .site-header,.site-footer,.skip-link,.toast,.no-print,.notice,button,.button,.program-links{display:none !important}
+  .print-only{display:block !important}
+  .print-header{font-size:11px;color:#333;border-bottom:1px solid #999;padding-bottom:6px;margin-bottom:14px}
+  .container{max-width:none;padding:0}
+  .results-layout{display:block !important}
+  .result-aside .aside-card{border:1px solid #ccc;margin-top:14px}
+  .result-hero,.party-result,.aside-card{box-shadow:none !important;background:#fff !important}
+  .party-result{break-inside:avoid;page-break-inside:avoid;border:1px solid #ccc}
+  .match-detail{break-inside:avoid}
+  details>summary{list-style:none;font-weight:600}
+  a{color:#000;text-decoration:none}
+}
