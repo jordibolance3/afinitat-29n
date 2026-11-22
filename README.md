@@ -6,4 +6,4 @@ Test d'afinitat amb les propostes documentades de les candidatures al Congrés p
 - Les preguntes, les opcions i les puntuacions són interpretacions editorials dels programes. Cada resposta enllaça amb la font oficial.
 - No és una recomanació de vot ni una predicció electoral.
 
-Versió del contingut: 2026-11-21.8. Fitxers generats automàticament amb `npm run estatic`; no s'editen a mà.
+Versió del contingut: 2026-11-22.1. Fitxers generats automàticament amb `npm run estatic`; no s'editen a mà.
