@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8">
+  <meta name="afinitat-mode" content="static">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <meta name="referrer" content="no-referrer">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#9d3432">
+  <meta name="description" content="Compara les teves prioritats amb els programes electorals del 29N a Barcelona. Un test amb fonts i resultats explicats; les respostes no surten del navegador.">
+  <title>Afinitat · Eleccions 29N</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <script src="scoring.js"></script>
+  <script src="app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-action="skip-content">Salta al contingut</a>
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#inici" class="brand" aria-label="Afinitat, inici"><span class="brand-mark" aria-hidden="true">a<span>·</span></span><span>afinitat<span class="brand-year">29N / 2026</span></span></a>
+      <nav aria-label="Navegació principal">
+        <a href="#inici" data-nav="inici">Inici</a>
+        <a href="#programes" data-nav="programes">Els programes</a>
+        <a href="#metode" data-nav="metode">Com funciona</a>
+      </nav>
+      <div id="account-nav"><button class="button subtle" data-action="auth">Inicia sessió <span aria-hidden="true">↗</span></button></div>
+    </div>
+  </header>
+  <main id="main" tabindex="-1"><div class="loading">Preparant les fonts del test…</div></main>
+  <footer class="site-footer"><div><a class="footer-brand" href="#inici">afinitat<span>·</span></a><p>Entendre abans de decidir.</p></div><div><span class="local-indicator">Versió pública · les respostes no surten del teu navegador</span><p>Barcelona · Congrés dels Diputats · 29 novembre 2026</p></div><a href="#metode">Fonts, criteris i privacitat ↗</a></footer>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="auth-dialog" aria-labelledby="auth-title"><div id="auth-content"></div></dialog>
+</body>
+</html>
