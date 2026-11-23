@@ -34,7 +34,7 @@ function loadLocal() {
   } catch { /* Esborrany il·legible: es comença de zero. */ }
 }
 async function staticApi(route, data) {
-  if (route === '/api/content') { const res = await fetch('contingut.json'); if (!res.ok) throw new Error('No s’ha pogut carregar el contingut del test.'); return res.json(); }
+  if (route === '/api/content') { const res = await fetch('contingut.json', { cache: 'no-cache' }); if (!res.ok) throw new Error('No s’ha pogut carregar el contingut del test.'); return res.json(); }
   if (route === '/api/me') return { user: null };
   if (route === '/api/results') { const result = window.AfinitatScoring.scoreQuiz(state.content, data.answers, data.weights, data.quizId); result.documents = state.content.documents; return { id: null, result }; }
   throw new Error('Aquesta funció no està disponible a la versió pública.');
