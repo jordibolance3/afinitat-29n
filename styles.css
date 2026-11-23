@@ -24,6 +24,15 @@ main:focus{outline:none}.spaced{margin-top:25px}
 .coverage-pill{font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:#e9eee4;color:#46634b;white-space:nowrap}
 .coverage-pill.low{background:#f8eccd;color:#7a5a12}
 .coverage-warning{font-size:11px;color:#7a5a12;background:#fbf4e1;border-radius:6px;padding:6px 9px;margin:8px 0 0}
+/* Selector d'idioma (CA / ES): discret, al costat de l'accés al compte */
+.header-inner nav{margin:0 auto}
+.lang-switch{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.lang-switch:empty{display:none}
+.lang-option{font:600 11px/1 var(--sans);letter-spacing:.06em;color:var(--muted);background:transparent;border:0;border-radius:999px;padding:6px 9px;min-width:32px;cursor:pointer}
+.lang-option:hover{color:var(--ink);background:#eceee7}
+.lang-option[aria-pressed=true]{color:var(--white);background:var(--ink);cursor:default}
+.lang-option:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+@media(max-width:680px){.header-inner nav{margin:0}.lang-switch{margin-left:auto}.lang-option{padding:7px 9px}}
 /* Exportar: capcalera nomes en paper i impressio neta del resultat */
 .print-only{display:none}
 @media print{
